@@ -1,0 +1,67 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="main.css">
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+  <!--[if IE]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+  <![endif]-->
+
+  <!-- Add your site or application content here -->
+  <!-- The overlay -->
+<div id="myNav" class="overlay">
+
+  <!-- Button to close the overlay navigation -->
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  
+
+  <!-- Overlay content -->
+  <div class="overlay-content">
+    <div class="section">
+      <h2>Klicka på ett namn för att ta bort det</h2>
+    </div>
+    <div class="section js-name-list">
+      <!--This part is populated from js-->
+    </div>
+  </div>
+</div>
+
+<div class="site-wrap">
+  <div class="section">
+    <div class="flip-box box-shadow center">
+      <div class="flip-box-inner">
+        <div class="flip-box-front">
+          <h2>Lägg till 3 namn för att börja</h2>
+        </div>
+        <div class="flip-box-back">
+          <h2>Det saknas fortfarande 3 namn</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <input id="name-input" type="text" ><input class="js-add-name" type="submit" value="Lägg till">
+    <input type="submit" value="Visa deltagare" onclick="openNav()"></input>
+  </div>
+</div>
+
+
+
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
+  <script src="main.js"></script>
+
+</body>
+
+</html>
