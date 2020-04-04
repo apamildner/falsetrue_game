@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 # False True Game
 
 This is an ongoing project for creating a Swedish drinking game. 
+=======
+# Project Title
+
+This is an ongoing project for creating a drinking game. 
+>>>>>>> 56f209d85aee123d5f126b1c76c8595b66d132fe
 
 ## Getting Started
 
