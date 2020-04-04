@@ -19,12 +19,10 @@ app.use(express.static(__dirname + '/client'))
 app.get('/api', (req, res) => {
   names = req.query.names
   id = req.query.id
-  //sess = req.session
-  //sess.used_strings = (typeof sess.used_strings === 'undefined') ? [] : sess.used_strings;
   res.send(generateString(names))
 });
 
 const port = process.env.PORT || 5000;
 app.listen(port);
 
-console.log(`Password generator listening on ${port}`);
+console.log(`FalseTrue app listening on ${port}`);

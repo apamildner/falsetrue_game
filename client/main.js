@@ -1,4 +1,15 @@
+
 var audio = new Audio('./sounds/flip.mp3');
+Storage.prototype.setObj = function(key, obj) {
+  return this.setItem(key, JSON.stringify(obj))
+}
+Storage.prototype.getObj = function(key) {
+  return JSON.parse(this.getItem(key))
+}
+function generateQueryStr(key,array){
+  console.log(array.map(val => key+'='+val).join('&'))
+  return array.map(val => key+'='+encodeURIComponent(val)).join('&')
+}
 
 function makeid(length) {
   var result           = '';
@@ -9,81 +20,87 @@ function makeid(length) {
   }
   return result;
 }
-/* Open */
-function openNav() {
-  //document.getElementById("myNav").style.display = "block";
-  $("#myNav").addClass("overlay-active")
-  //document.getElementById("myNav").style.opacity = 0.9
-}
 
-/* Close */
+function openNav() {
+  $("#myNav").addClass("overlay-active")
+}
 function closeNav() {
   $("#myNav").removeClass("overlay-active")
-  //document.getElementById("myNav").style.display = "none";
-  //document.getElementById("myNav").style.opacity = 0.0
 }
-function getArrayFromUrl(tag){
-  tag_arr = []
-  console.log(new URLSearchParams(window.location.href))
-  for (const [key, value] of new URLSearchParams(window.location.href).entries()) {
-    if (key === tag){
-      tag_arr.push(value)
-    }
-  }
-  return tag_arr
-}
+
 function addNameElementToNameList(name){
-  $('.js-name-list').append('<a href="#" data-name='+name+'>'+name+'</a>')
+  console.log(name)
+  $('.js-name-list').append('<a href="#" data-name='+encodeURIComponent(name)+'>'+name+'</a>')
 }
 function addDeleteOnClickHandlerToNameElements(){
   $('.js-name-list a').on('click',function(e){
     e.preventDefault()
-    name = $(this).attr("data-name")
-    current_url = window.location.href
-    url_tag = '&names[]='+name
-    //Lös detta, tar bort alla names ur regex..
-    current_url = current_url.replace(url_tag,'')
-    window.history.pushState(null,null, current_url)
+    name = decodeURIComponent($(this).attr("data-name"))
+    names = localStorage.getObj("names")
+    names = names.filter(n => n != name) //Removes name from localstorage array
+    localStorage.setObj("names",names)
     $(this).remove()
   })
 }
-function initNamesFromUrl(js_tag){
+function initNamesFromLocalStorage(js_tag){
 
-names = getArrayFromUrl("names[]")
-names.forEach(name => {
-  addNameElementToNameList(name)
-});
-addDeleteOnClickHandlerToNameElements()
+  names = localStorage.getObj("names")
+  if(names != null){
+    names.forEach(name => {
+      addNameElementToNameList(name)
+    });
+    addDeleteOnClickHandlerToNameElements()
+  }
 }
 
-function addUrl(newURL) {
-  url = window.location.href
-  console.log(url)
-  if(url === "http://localhost:5000/"){
-    newURL = url+'?id='+makeid(10)+newURL
-  }
-  else{
-    newURL = url+newURL
-  }
+addNameFun = (e) => {
+  var name = DOMPurify.sanitize($("#name-input").val()); //Add sanitize to this later
+  $("#name-input").val("")
+  names = localStorage.getObj("names")
+  if (names != null && name.length > 0){
+    if(names.includes(name)){
+      alert("Namnet "+name+" är redan tillagt.")
+    }else{
+      names = localStorage.getObj("names")
+      names.push(name)
+      localStorage.setObj("names",names)
+      addNameElementToNameList(name)
+      addDeleteOnClickHandlerToNameElements()
 
-  window.history.pushState(null,null, newURL);
+      if (names.length == 3){
+        $('.flip-box-front').text("Bra jobbat! Tryck här för att börja eller lägg till fler namn.")
+        $('.flip-box-back').text("Bra jobbat! Tryck här för att börja eller lägg till fler namn.")
+      }
+    }
+  }else{
+    localStorage.setObj("names",[name])
+    addNameElementToNameList(name)
+  }
 }
 
-console.log(makeid(5));
+
 front = true
 $(document).ready(function(){
-initNamesFromUrl()
+initNamesFromLocalStorage()
+$('#name-input').keypress(function(event){
+  var keycode = (event.keyCode ? event.keyCode : event.which);
+  if(keycode == '13'){
+      addNameFun() 
+  }
+})
 
+$('.js-add-name').bind('click',addNameFun)
 $('.flip-box').bind("click", (e) => {
   //e.preventDefault()
   front = !front
   _ = front ? $('.flip-box').removeClass('js-front') : $('.flip-box').addClass('js-front')
   audio.play();
-  names = getArrayFromUrl("names[]")
+  names = localStorage.getObj("names")
 
   if(names.length > 2){
+    query = generateQueryStr("names[]",localStorage.getObj("names"))
     $.ajax({
-      url: 'http://localhost:5000/api?'+window.location.href.split('/?')[1],
+      url: 'http://localhost:5000/api?'+query,
       context: document.body
     }).done( (data) =>{
       if (front) {
@@ -94,34 +111,4 @@ $('.flip-box').bind("click", (e) => {
     });
   }
   });
-
-
-
-
 });
-addNameFun = (e) => {
-  var name = $("#name-input").val();
-  $("#name-input").val("")
-  names = getArrayFromUrl("names[]")
-  if(names.includes(name)){
-    alert("Namnet "+name+" är redan tillagt.")
-    
-  }else if(name.length > 0 ){
-    addUrl('&names[]='+name)
-    addNameElementToNameList(name)
-    addDeleteOnClickHandlerToNameElements()
-
-    names = getArrayFromUrl("names[]").length
-    if (names >= 3){
-      $('.flip-box-front').text("Bra jobbat! Tryck här för att börja eller lägg till fler namn.")
-      $('.flip-box-back').text("Bra jobbat! Tryck här för att börja eller lägg till fler namn.")
-    }
-  }
-}
-$('.js-add-name').bind('click',addNameFun)
-$('#name-input').keypress(function(event){
-  var keycode = (event.keyCode ? event.keyCode : event.which);
-  if(keycode == '13'){
-      addNameFun() 
-  }
-})
