@@ -23,9 +23,11 @@ function makeid(length) {
 
 function openNav() {
   $("#myNav").addClass("overlay-active")
+  $(".js-content-blur").addClass("blur")
 }
 function closeNav() {
   $("#myNav").removeClass("overlay-active")
+  $(".js-content-blur").removeClass("blur")
 }
 
 function addNameElementToNameList(name){

@@ -1,7 +1,14 @@
 
 var randomIntFromInterval = require('../utils/helpers')
-db_storage = ["$0 har alltid avgudat $1","$0 är alltid avundsjuk på $1",
-"$0 kör bil bättre än $1","$1 kan jonglera","$0 skulle vinna över $1 i en boxningsmatch","$0 har en crush på $1"]
+db_storage = ["$0 har alltid avgudat $1","$0 har alltid varit lite avundsjuk på $1s hår",
+"$0 kör bil bättre än $1","$1 kan jonglera","$0 skulle vinna över $1 i en boxningsmatch","$0 har en crush på $1",
+"$1 önskar att hen växte upp under skejt-eran i 90-talets Kalifornien",
+"$0 har aldrig krockat med föräldrarnas bil",
+"$1 gillar att bli pony-tail grabbad",
+"$0 lagar troligen bättre fyllekäk än $1",
+"$0 är helt med på känslan av att ha det motsatta könsorganet",
+"'En redig buske är aldrig fel' anser $0",
+"$1 uppskattar anime-porr men har aldrig vågat säga det till någon (gärna med bläckfiskar)"]
 
 
 function generateString(names){
